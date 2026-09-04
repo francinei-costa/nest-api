@@ -1,0 +1,63 @@
+services:
+  app:
+    networks:
+      - nest-network
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-app
+    env_file:
+      - .env
+    volumes:
+      - .:/home/node/app
+    ports:
+      - '3000:3000'
+    entrypoint: ['/bin/bash', '.docker/entrypoint.sh']
+    restart: unless-stopped
+    depends_on:
+      nest-db:
+        condition: service_healthy
+
+  nest-db:
+    networks:
+      - nest-network
+    build: .docker/postgres
+    container_name: nest-db
+    restart: always
+    tty: true
+    ports:
+      - '5432:5432'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # pgadmin:
+  #   networks:
+  #     - nest-network
+  #   image: dpage/pgadmin4
+  #   container_name: nest-pgadmin
+  #   restart: always
+  #   tty: true
+  #   ports:
+  #     - '8000:80'
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+  #   depends_on:
+  #     - nest-db
+
+volumes:
+  dbdata:
+
+networks:
+  nest-network:
+    name: nest-network
+    driver: bridge

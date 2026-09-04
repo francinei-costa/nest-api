@@ -1,0 +1,32 @@
+# Configurar um novo projeto é bastante simples com a CLI do Nest
+npm i -g @nestjs/cli
+nest new project-name
+
+# comando para verificar como ficaria a estrutura de pastas
+nest g controller courses --dry--run
+# comando para criar o arquivo na estrutura de pastas
+nest g controller courses
+
+# migração com typeORM
+npm run migration:create --name=nome
+npm run migration:generate --name=nome
+npm run migration:run
+npm run migration:revert
+
+# rodando o docker
+docker compose up -d --build
+
+# instalando, criando tudo dentro do container
+docker-compose exec app bash
+npx typeorm migration:create -n CreateCoursesTable / npm run migration:create --name=CreateCoursesTable
+
+# parar um serviço especifico
+docker compose stop nome_do_servico
+
+# parar e remover o contêiner do serviço
+docker compose rm -s nome_do_servico
+
+
+
+
+
