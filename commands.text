@@ -7,6 +7,9 @@ nest g controller courses --dry--run
 # comando para criar o arquivo na estrutura de pastas
 nest g controller courses
 
+# instalando dependencias
+npm i @nestjs/config @nestjs/mapped-types @nestjs/typeorm class-transformer class-validator pg typeorm
+
 # migração com typeORM
 npm run migration:create --name=nome
 npm run migration:generate --name=nome
@@ -25,8 +28,3 @@ docker compose stop nome_do_servico
 
 # parar e remover o contêiner do serviço
 docker compose rm -s nome_do_servico
-
-
-
-
-
